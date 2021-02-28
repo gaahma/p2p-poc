@@ -60,9 +60,8 @@ const sw = Swarm(config);
 
 (async () => {
   const port = await getPort()
-
   sw.listen(port)
-
+  log(`Listening on port: ${port}`)
   // I'd really like to understand what hapens when this channel is joined
   sw.join('4401c223907732c197395e0669722183da5109508999cbe38279a04737bed728')
 
