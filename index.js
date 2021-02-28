@@ -10,10 +10,11 @@ const readline = require('readline')
  */
 const peers = {}
 // Counter for connections, used for identify connections
-let connSeq = 0
+// let connSeq = 0
 
 // Peer Identity, a random hash for identify your peer
-const myId = process.argv[2] || crypto.randomBytes(32)
+const myUserName = process.argv[2] || 'Unknown user'
+const myId = crypto.randomBytes(32)
 // console.log('Your identity: ' + myId.toString('hex'))
 
 // reference to redline interface
@@ -43,10 +44,16 @@ const askUser = async () => {
   })
 
   rl.question('Send message: ', message => {
-    // Broadcast to peers
-    for (let id in peers) {
-      peers[id].conn.write(message)
+    const data = JSON.stringify({ userName: myUserName, message });
+
+    if (Object.keys(peers).length) {
+      for (let id in peers) {
+        peers[id].conn.write(data)
+      }
+    } else {
+      log(`No peers to receive message: ${message}`)
     }
+
     rl.close()
     rl = undefined
     askUser()
@@ -66,52 +73,40 @@ const sw = Swarm(config);
   const port = await getPort()
 
   sw.listen(port)
-  console.log('Listening to port: ' + port)
+  // console.log('Listening to port: ' + port)
 
   // I'd really like to understand what hapens when this channel is joined
   sw.join('4401c223907732c197395e0669722183da5109508999cbe38279a04737bed728')
 
   sw.on('connection', (conn, info) => {
-    // Connection id
-    const seq = connSeq
+    const peerId = info.id.toString('hex')
 
-    const peerId = info.id.toString('base64')
-    // console.log(conn);
-    // log(`Connected #${seq} to peer: ${peerId}`)
     // Keep alive TCP connection with peer
     if (info.initiator) {
       try {
-        // these are regularly timing out and disconnecting dispite this
-        conn.setKeepAlive(true, 600)
+        // these connections all close, idk what the value is of this...
+        conn.setKeepAlive(true, 2000)
       } catch (exception) {
         log('exception', exception)
       }
     }
 
-    conn.on('data', (data) => {
-      log(`${peerId}: ${data.toString()}`)
-      // log(
-      //   'Received Message from peer ' + peerId,
-      //   '----> ' + data.toString()
-      // );
+    conn.on('data', (json) => {
+
+      const { userName, message } = JSON.parse(json);
+      log(`${userName}: ${message}`)
     });
 
     conn.on('close', () => {
-      if (peers[peerId].seq === seq) {
-        log('Connection closed');
-        delete peers[peerId];
-      }
+      log(`closing connection with peer: ${peerId}`);
+      // delete peers[peerId];
     });
 
     // Save the connection
-    if (!peers[peerId]) {
-      peers[peerId] = { };
-    }
-    peers[peerId].conn = conn
-    peers[peerId].seq = seq
-    
-    connSeq++;
-
+    // if (!peers[peerId]) {
+    peers[peerId] = { conn };
+    // }
+    // peers[peerId].conn = conn
   });
 
   // Read user message from command line
