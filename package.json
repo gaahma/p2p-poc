@@ -2,13 +2,16 @@
   "name": "p2p-poc",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "node index.js"
+    "global:setup": "yarn global add typescript@latest ts-node",
+    "test-p2p": "ts-node index.ts",
+    "test-blockchain": "ts-node blockchain.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "crypto-js": "^4.0.0",
     "dat-swarm-defaults": "^1.0.2",
     "discovery-swarm": "^6.1.0",
@@ -17,5 +20,8 @@
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/crypto-js": "^4.0.1"
+  }
 }

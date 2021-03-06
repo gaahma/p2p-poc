@@ -15,3 +15,7 @@ const genesisBlockData: IBlock = {
 }
 
 const first = new Block(genesisBlockData);
+(async () => {
+  const valid = await first.verifySignature();
+  console.log(`Valid hash: ${valid}`)
+})();
