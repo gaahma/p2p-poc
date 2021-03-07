@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
+  "private":"true",
   "scripts": {
     "global:setup": "yarn global add typescript@latest ts-node",
     "p2p": "ts-node p2p.ts",
