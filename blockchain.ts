@@ -1,21 +1,8 @@
-import { Block, IBlock } from './blocks';
+import { Block, IBlock } from './src/blockchain';
+import { writeToLedger } from './src/ledger';
 
-const now = new Date().toUTCString()
-const data = {
-  message: 'hello world!'
-};
+const genesisBlock: IBlock = { data: { message: 'Hello world!' }, difficulty: 5 };
 
-const genesisBlockData: IBlock = {
-  index: 0,
-  data: { message: 'Hello world!' },
-  timestamp: new Date().toUTCString(),
-  precedingHash: '',
-  hash: ''
-
-}
-
-const first = new Block(genesisBlockData);
-(async () => {
-  const valid = await first.verifySignature();
-  console.log(`Valid hash: ${valid}`)
-})();
+const first = new Block(genesisBlock);
+writeToLedger(first);
+// console.log(JSON.stringify(first, null, 2));

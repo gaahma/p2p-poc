@@ -1,26 +1,30 @@
 // // const crypto = require('crypto')
 // import crypto from 'crypto';
-// const Swarm = require('discovery-swarm')
-// const defaults = require('dat-swarm-defaults')
-// const getPort = require('get-port')
-// const readline = require('readline')
+// import Swarm from 'discovery-swarm';
+// import defaults from 'dat-swarm-defaults';
+// import getPort from 'get-port';
+// import readline from 'readline';
+// // const Swarm = require('discovery-swarm')
+// // const defaults = require('dat-swarm-defaults')
+// // const getPort = require('get-port')
+// // const readline = require('readline')
 
 // const peers = {}
 
 // const myUserName = process.argv[2] || 'Unknown user'
-// const myId = crypto.randomBytes(32)
+// const myId = crypto.randomBytes(256)
 // // console.log('Your identity: ' + myId.toString('hex'))
 
 // // reference to redline interface
 // let rl
-// function log () {
+// const log = (args) => {
 //   if (rl) {
 //     rl.clearLine()    
 //     rl.close()
 //     rl = undefined
 //   }
-//   for (let i = 0, len = arguments.length; i < len; i++) {
-//     console.log(arguments[i])
+//   for (let i = 0, len = args.length; i < len; i++) {
+//     console.log(args[i])
 //   }
 //   askUser()
 // }
