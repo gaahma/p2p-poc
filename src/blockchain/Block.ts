@@ -27,12 +27,19 @@ export class Block implements IBlock {
     this.hash = hash || this.createBlockHash();
   }
 
-  computeHash () {
-    return SHA256(this.toString()).toString();
+  computeHash (blockData?: string) {
+    // TODO: compress hashes to WIF-compressed format
+    return SHA256(blockData || this.toString()).toString();
+  }
+
+  blockDataString () {
+    return this.precedingHash + this.timestamp + JSON.stringify(this.data);
   }
 
   toString () {
-    return '' + this.precedingHash + this.timestamp + JSON.stringify(this.data) + this.nonce;
+    return (
+      this.blockDataString() + this.nonce
+    );
   }
 
   createBlockHash (): string {
@@ -40,20 +47,20 @@ export class Block implements IBlock {
     console.log(`Current hash difficulty: ${this.difficulty}`);
     process.stdout.write('Creating block...')
     const zeros = new Array(this.difficulty + 1).join('0');
+    const blockData = this.blockDataString();
     const begin = now();
     while (!hash.startsWith(zeros)) {
       if (this.nonce % 100000 === 0) {
         process.stdout.write('.'); // let our human know we're still working
       }
       this.nonce++;
-      hash = this.computeHash();
+      hash = this.computeHash(blockData + this.nonce);
     
     }
     const end = now();
     if (this.verifyHash(hash)) {
       console.log(`\nBlock created in ${(end - begin)/1000}s`);
       console.log(`Hash: ${hash}`);
-      console.log(`Self verified: true`);
       return hash;
     }
     throw new Error('Unable to create valid block');
