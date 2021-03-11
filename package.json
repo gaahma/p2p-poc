@@ -3,21 +3,29 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
-  "private":"true",
+  "private": "true",
   "scripts": {
     "global:setup": "yarn global add typescript@latest ts-node",
     "p2p": "ts-node p2p.ts",
-    "blockchain": "ts-node blockchain.ts"
+    "blockchain": "ts-node blockchain.ts",
+    "hash": "ts-node keypairs.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/eccrypto": "^1.1.2",
+    "@types/elliptic": "^6.4.12",
+    "@types/jsrsasign": "^8.0.10",
     "bcrypt": "^5.0.1",
     "crypto-js": "^4.0.0",
     "dat-swarm-defaults": "^1.0.2",
     "discovery-swarm": "^6.1.0",
+    "eccrypto": "^1.1.5",
+    "elliptic": "^6.5.4",
     "get-port": "^5.1.1",
+    "jsrsasign": "^10.1.13",
     "portfinder": "^1.0.28",
+    "secp256k1": "^4.0.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   },
