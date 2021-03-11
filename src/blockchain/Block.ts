@@ -47,14 +47,14 @@ export class Block implements IBlock {
     console.log(`Current hash difficulty: ${this.difficulty}`);
     process.stdout.write('Creating block...')
     const zeros = new Array(this.difficulty + 1).join('0');
-    const blockData = this.blockDataString();
+    const blockStr = this.blockDataString();
     const begin = now();
     while (!hash.startsWith(zeros)) {
       if (this.nonce % 100000 === 0) {
         process.stdout.write('.'); // let our human know we're still working
       }
       this.nonce++;
-      hash = this.computeHash(blockData + this.nonce);
+      hash = this.computeHash(blockStr + this.nonce);
     
     }
     const end = now();
